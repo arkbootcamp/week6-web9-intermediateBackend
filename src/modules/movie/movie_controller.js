@@ -49,12 +49,12 @@ module.exports = {
   },
   postMovie: async (req, res) => {
     try {
-      console.log(req.body)
       const { movieName, movieCategory, movieReleaseDate } = req.body
       const setData = {
         movie_name: movieName,
         movie_category: movieCategory,
-        movie_release_date: movieReleaseDate
+        movie_release_date: movieReleaseDate,
+        movie_image: req.file ? req.file.filename : ''
       }
       const result = await movieModel.createData(setData)
       return helper.response(res, 200, 'Success Create Movie', result)
@@ -66,6 +66,7 @@ module.exports = {
     try {
       const { id } = req.params
       // kondisi pengecekan apakah data di dalam database ada berdasarkan id ...
+      // proses untuk mendeleta file lama
       const { movieName, movieCategory, movieReleaseDate } = req.body
       const setData = {
         movie_name: movieName,
@@ -83,6 +84,7 @@ module.exports = {
     try {
       // 1. buat request di post
       // 2. set up controller dan model
+      // 3. mendelete data yang ada di dalam folder uploads fs.unlink
       console.log(req.params)
       // hasil response untuk delete id yg kedelete saja
     } catch (error) {

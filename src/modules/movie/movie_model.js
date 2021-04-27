@@ -37,6 +37,7 @@ module.exports = {
     return new Promise((resolve, reject) => {
       connection.query('INSERT INTO movie SET ?', setData, (error, result) => {
         // !error ? resolve({id: result.inserId, ...setData}) : reject(new Error(error))
+        console.log(error)
         if (!error) {
           const newResult = {
             id: result.insertId,
