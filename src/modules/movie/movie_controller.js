@@ -1,3 +1,5 @@
+const redis = require('redis')
+const client = redis.createClient()
 const helper = require('../../helpers/wrapper')
 const movieModel = require('./movie_model')
 
@@ -27,6 +29,12 @@ module.exports = {
       }
 
       const result = await movieModel.getDataAll(limit, offset, searchByName)
+      // console.log(req.query)
+      client.setex(
+        `getmovie:${JSON.stringify(req.query)}`,
+        3600,
+        JSON.stringify({ result, pageInfo })
+      )
       return helper.response(res, 200, 'Success Get Data', result, pageInfo)
     } catch (error) {
       return helper.response(res, 400, 'Bad Request', error)
@@ -39,6 +47,7 @@ module.exports = {
       // kondisi pengecekan apakah data di dalam databe dengan id ..
       // console.log(result) // [] | [......]
       if (result.length > 0) {
+        client.set(`getmovie:${id}`, JSON.stringify(result))
         return helper.response(res, 200, 'Success Get Data By Id', result)
       } else {
         return helper.response(res, 404, 'Data By Id ... Not Found !', null)
