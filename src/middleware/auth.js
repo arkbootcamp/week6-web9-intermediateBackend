@@ -15,7 +15,7 @@ module.exports = {
           return helper.response(res, 403, error.message)
         } else {
           // console.log(result) // berisi data sebelum di enkripsi
-          req.decodeToken = result
+          req.decodeToken = result // {user_role: 'user'}
           next()
         }
       })
@@ -30,7 +30,7 @@ module.exports = {
     // if (conditioncheckuserrole apakah admin ?) { // req.decodeToken.user_role === ?
     //   next()
     // } else {
-    //   mengembalikan respone bahwa endpoin ini tidak bisa diakses selain admin
+    //   mengembalikan response bahwa endpoin ini tidak bisa diakses selain admin
     // }
     next()
   }

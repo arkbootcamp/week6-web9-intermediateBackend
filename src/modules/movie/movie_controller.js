@@ -29,6 +29,14 @@ module.exports = {
       }
 
       const result = await movieModel.getDataAll(limit, offset, searchByName)
+      for (const value of result) {
+        // console.log(value)
+        // value.premiere = await movieModel.getPremiereByMovieId(value.movie_id)
+        value.premiere = [
+          { premiere_id: 1, premiere_name: 'Cinema21' },
+          { premiere_id: 2, premiere_name: 'By.2' }
+        ]
+      }
       // console.log(req.query)
       client.setex(
         `getmovie:${JSON.stringify(req.query)}`,
