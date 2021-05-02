@@ -42,19 +42,17 @@ module.exports = {
           "<b>Click Here to activate</b><a href='http://localhost:3001/api/v1/user-activation/1'>Click !</>" // html body
       }
 
-      await transporter.sendMail(mailOptions, function (error, info) {
+      await transporter.sendMail(mailOptions, async (error, info) => {
         if (error) {
           console.log(error)
           return helper.response(res, 400, 'Email not send !')
         } else {
           console.log('Email sent:' + info.response)
-          return helper.response(res, 200, 'Success Register User')
+          const result = await authModel.register(setData)
+          delete result.user_password
+          return helper.response(res, 200, 'Success Register User', result)
         }
       })
-
-      // const result = await authModel.register(setData)
-      // delete result.user_password
-      // return helper.response(res, 200, 'Success Register User', result)
     } catch (error) {
       return helper.response(res, 400, 'Bad Request', error)
     }
