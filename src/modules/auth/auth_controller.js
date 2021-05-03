@@ -23,7 +23,9 @@ module.exports = {
       // jika ada response gagal msg = email sudah pernah di daftarkan
       // jika tidak ada = menjalankan proses model register user
       // https://myaccount.google.com/lesssecureapps?pli=1&rapt=AEjHL4N78ToeMZfGrjVbk-kR95NcXdeZBPjuMIbllyX9vO7Te7z9HXQNo8LA0WUR_ACHHXAg2l4G67dmKBk8loxwQiA_wxRYvQ
-      console.log(process.env.SMTP_EMAIL)
+
+      // simpan data ke database / proses registrasi
+
       const transporter = nodemailer.createTransport({
         host: 'smtp.gmail.com',
         port: 587,
@@ -38,8 +40,7 @@ module.exports = {
         from: '"Tickitz 👻" <memo.in.aja@gmail.com>', // sender address
         to: userEmail, // list of receivers
         subject: 'Tickitz - Activation Email', // Subject line
-        html:
-          "<b>Click Here to activate</b><a href='http://localhost:3001/api/v1/user-activation/1'>Click !</>" // html body
+        html: `<b>Click Here to activate </b><a href='http://localhost:3001/api/v1/user-activation/${userEmail}'>Click !</>` // html body
       }
 
       await transporter.sendMail(mailOptions, async (error, info) => {
