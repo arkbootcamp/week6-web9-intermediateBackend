@@ -30,11 +30,11 @@ module.exports = {
 
       const result = await movieModel.getDataAll(limit, offset, searchByName)
       for (const value of result) {
-        // console.log(value)
-        // value.premiere = await movieModel.getPremiereByMovieId(value.movie_id)
-        value.premiere = [
-          { premiere_id: 1, premiere_name: 'Cinema21' },
-          { premiere_id: 2, premiere_name: 'By.2' }
+        // console.log(value.user_id)
+        // value.skill = await movieModel.getSkillByUserId(value.user_id)
+        value.skill = [
+          { skill_id: 1, skill_name: 'Javascript' },
+          { skill_id: 2, skill_name: 'PHP' }
         ]
       }
       // console.log(req.query)
