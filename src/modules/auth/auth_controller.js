@@ -5,6 +5,8 @@ const authModel = require('./auth_model')
 const nodemailer = require('nodemailer')
 require('dotenv').config()
 
+const dataRefreshToken = {}
+
 module.exports = {
   register: async (req, res) => {
     try {
@@ -76,9 +78,15 @@ module.exports = {
           const payload = checkEmailUser[0]
           delete payload.user_password
           const token = jwt.sign({ ...payload }, 'RAHASIA', {
+            expiresIn: '10s'
+          })
+          const refreshToken = jwt.sign({ ...payload }, 'RAHASIA', {
             expiresIn: '24h'
           })
-          const result = { ...payload, token }
+          // memasukan properti dan value kedalam dataRefreshToken
+          dataRefreshToken[checkEmailUser[0].user_id] = refreshToken
+          // console.log(dataRefreshToken)
+          const result = { ...payload, token, refreshToken }
           return helper.response(res, 200, 'Success login !', result)
         } else {
           return helper.response(res, 400, 'Wrong password !')
@@ -86,6 +94,43 @@ module.exports = {
       } else {
         return helper.response(res, 404, 'Email / Account not registed')
       }
+    } catch (error) {
+      return helper.response(res, 400, 'Bad Request', error)
+    }
+  },
+  refresh: async (req, res) => {
+    try {
+      const { refreshToken } = req.body
+      // user id 1 = refreshtoken = 1234
+      // generate si access token yang baru
+      console.log(refreshToken)
+      jwt.verify(refreshToken, 'RAHASIA', (error, result) => {
+        if (
+          (error && error.name === 'JsonWebTokenError') ||
+          (error && error.name === 'TokenExpiredError')
+        ) {
+          delete dataRefreshToken.userId
+          return helper.response(res, 403, error.message)
+        } else {
+          if (
+            result.user_id in dataRefreshToken &&
+            dataRefreshToken[result.user_id] === refreshToken
+          ) {
+            delete result.iat
+            delete result.exp
+            const token = jwt.sign(result, 'RAHASIA', { expiresIn: '15s' })
+            const newResult = { ...result, token, refreshToken }
+            return helper.response(
+              res,
+              200,
+              'Success Refresh Token !',
+              newResult
+            )
+          } else {
+            return helper.response(res, 403, 'Wrong Refresh Token')
+          }
+        }
+      })
     } catch (error) {
       return helper.response(res, 400, 'Bad Request', error)
     }

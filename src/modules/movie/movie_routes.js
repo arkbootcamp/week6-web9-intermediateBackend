@@ -17,7 +17,7 @@ Route.get('/hello', movieController.sayHello)
 // ====================
 Route.get(
   '/',
-  // authMiddleware.authentication,
+  authMiddleware.authentication,
   redisMiddleware.getMovieRedis,
   movieController.getAllMovie
 )
