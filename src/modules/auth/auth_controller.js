@@ -78,10 +78,10 @@ module.exports = {
           const payload = checkEmailUser[0]
           delete payload.user_password
           const token = jwt.sign({ ...payload }, 'RAHASIA', {
-            expiresIn: '10s'
+            expiresIn: '24h'
           })
           const refreshToken = jwt.sign({ ...payload }, 'RAHASIA', {
-            expiresIn: '24h'
+            expiresIn: '48h'
           })
           // memasukan properti dan value kedalam dataRefreshToken
           dataRefreshToken[checkEmailUser[0].user_id] = refreshToken
