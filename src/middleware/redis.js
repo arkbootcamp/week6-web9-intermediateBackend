@@ -5,11 +5,11 @@ const client = redis.createClient({
   port: process.env.REDIS_PORT,
   password: process.env.REDIS_PASSWORD
 })
+const helper = require('../helpers/wrapper')
 
 client.on('connect', () => {
   console.log('Connected to our redis instance!')
 })
-const helper = require('../helpers/wrapper')
 
 module.exports = {
   getMovieByIdRedis: (req, res, next) => {

@@ -104,7 +104,7 @@ module.exports = {
       // menjalankan proses post data ke table topup status = pending
       // const topupData = menjalankan model untuk post data ke table topup
       const topupData = {
-        topupId: 12347,
+        topupId: 111,
         topupAmount: 100000
       }
       const topup = await transactionModel.createTopup(topupData)
