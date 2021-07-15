@@ -28,7 +28,7 @@ module.exports = {
         'SELECT * FROM movie WHERE movie_id = ?',
         id,
         (error, result) => {
-          !error ? resolve(result[0]) : reject(new Error(error))
+          !error ? resolve(result) : reject(new Error(error))
         }
       )
     })
